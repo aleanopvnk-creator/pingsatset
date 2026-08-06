@@ -1,0 +1,9 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'aos/dist/aos.css';
+@import 'sweetalert2/dist/sweetalert2.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
