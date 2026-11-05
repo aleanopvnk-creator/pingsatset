@@ -94,7 +94,7 @@ app.get('/api/ip-info', async (req, res) => {
         });
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // Provider 2: ip-api.com
   try {
@@ -116,7 +116,7 @@ app.get('/api/ip-info', async (req, res) => {
         });
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // Provider 3: api.ipify.org fallback
   try {
@@ -138,7 +138,7 @@ app.get('/api/ip-info', async (req, res) => {
         });
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // Local / offline fallback
   res.json({
@@ -415,13 +415,15 @@ app.get('/api/wifi-info', (req, res) => {
       });
     });
   } else {
+    // Non-Windows (Linux / Vercel cloud environment)
     res.json({
       success: true,
       connected: true,
-      ssid: 'Wi-Fi Terhubung',
+      isCloud: true,
+      ssid: '',
       bssid: '',
       state: 'connected',
-      signal: 90,
+      signal: 92,
       rssi: -45,
       band: '5 GHz',
       channel: '36',
@@ -1029,7 +1031,7 @@ app.get('/api/tools/response-time', async (req, res) => {
 
   try {
     const tDnsStart = Date.now();
-    await dnsPromises.lookup(host).catch(() => {});
+    await dnsPromises.lookup(host).catch(() => { });
     dnsTime = Date.now() - tDnsStart;
 
     const controller = new AbortController();

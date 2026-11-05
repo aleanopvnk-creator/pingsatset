@@ -1,6 +1,14 @@
 import React from 'react';
-import { Mail, X, MessageSquare, Send, Globe, CheckCircle2 } from 'lucide-react';
+import { Mail, X, MessageSquare, Send, Globe, CheckCircle2, Instagram } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+
+function TikTokIcon({ className = "w-4 h-4" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.34 22a6.34 6.34 0 0 0 6.34-6.33V9.05a8.16 8.16 0 0 0 4.91 1.63v-3.5a4.85 4.85 0 0 1-1-.49z" />
+    </svg>
+  );
+}
 
 export default function ContactModal({ isOpen, onClose }) {
   const { lang } = useLanguage();
@@ -48,13 +56,31 @@ export default function ContactModal({ isOpen, onClose }) {
                 <span>WhatsApp: 0811-1644-119</span>
               </a>
               <a
-                href="mailto:support@pingsatset.net"
+                href="https://www.instagram.com/aaleano?rpxt=eGlsNnBveTkxbzl2&utm_source=qr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-pink-600 dark:text-pink-400 font-black hover:underline text-sm"
+              >
+                <Instagram className="w-4 h-4" />
+                <span>Instagram: @aaleano</span>
+              </a>
+              <a
+                href="https://www.tiktok.com/@aleeinhere"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-cyan-600 dark:text-cyan-400 font-black hover:underline text-sm"
+              >
+                <TikTokIcon className="w-4 h-4" />
+                <span>TikTok: @aleeinhere</span>
+              </a>
+              <a
+                href="mailto:support@pingsatset.net"
+                className="flex items-center space-x-2 text-slate-700 dark:text-slate-300 font-black hover:underline text-sm"
               >
                 <Mail className="w-4 h-4" />
                 <span>support@pingsatset.net</span>
               </a>
-              <div className="flex items-center space-x-2 text-slate-700 dark:text-slate-300 font-bold text-xs">
+              <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-400 font-bold text-xs pt-1">
                 <Globe className="w-4 h-4 text-cyan-500" />
                 <span>https://pingsatset.net</span>
               </div>

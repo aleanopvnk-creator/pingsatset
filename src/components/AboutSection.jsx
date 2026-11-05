@@ -83,12 +83,31 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* Footer Branding Note */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-purple-950/40 to-slate-900 border border-cyan-500/20 text-center">
+      {/* Footer Branding Note & Social Links */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-purple-950/40 to-slate-900 border border-cyan-500/20 text-center space-y-2">
         <p className="text-xs text-slate-300 flex items-center justify-center space-x-1.5 font-medium">
           <span>Dikembangkan secara independen oleh</span>
           <span className="text-gradient-cyan font-black">PingSatSet Team</span>
         </p>
+        <div className="flex items-center justify-center gap-3 pt-1">
+          <a
+            href="https://www.instagram.com/aaleano?rpxt=eGlsNnBveTkxbzl2&utm_source=qr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-bold text-pink-400 hover:text-pink-300 hover:underline inline-flex items-center gap-1"
+          >
+            <span>Instagram: @aaleano</span>
+          </a>
+          <span className="text-slate-600">•</span>
+          <a
+            href="https://www.tiktok.com/@aleeinhere"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-bold text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-1"
+          >
+            <span>TikTok: @aleeinhere</span>
+          </a>
+        </div>
       </div>
     </div>
   );

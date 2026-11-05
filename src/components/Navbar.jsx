@@ -8,16 +8,27 @@ import {
   Menu,
   X,
   Globe,
-  Wifi
+  Wifi,
+  Instagram
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+
+function TikTokIcon({ className = "w-3.5 h-3.5" }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.34 22a6.34 6.34 0 0 0 6.34-6.33V9.05a8.16 8.16 0 0 0 4.91 1.63v-3.5a4.85 4.85 0 0 1-1-.49z" />
+    </svg>
+  );
+}
 
 export default function Navbar({
   activeTab,
   setActiveTab,
   theme = 'dark',
   toggleTheme,
-  wifiName = 'Wi-Fi'
+  wifiName = 'Wi-Fi',
+  onOpenAbout,
+  onOpenContact
 }) {
   const { lang, toggleLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -220,58 +231,132 @@ export default function Navbar({
 
         </div>
 
-        {/* Mobile Dropdown Menu (Opened cleanly via [ ☰ ]) */}
+        {/* SatsetReels Style Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
-          <div className={`md:hidden mt-3 pt-3 border-t space-y-2 animate-fadeIn transition-all ${isLight ? 'border-slate-200' : 'border-slate-800'
-            }`}>
-            {/* Wi-Fi Status Banner on Mobile (Clean Text, No Green Icon) */}
-            <div className={`p-2.5 rounded-xl border text-xs font-black text-left ${isLight
-                ? 'bg-slate-100 border-slate-300 text-slate-800'
-                : 'bg-slate-900 border-slate-800 text-slate-200'
-              }`}>
-              <span className="truncate block">{t('connectedTo')} {wifiName || 'Wi-Fi'}</span>
-            </div>
-
-            {/* Navigation Options List - ONLY 3 CLEAN ITEMS (PLAIN TEXT ONLY, NO ICONS, NO AKTIF BADGE) */}
-            <div className="grid grid-cols-1 gap-1.5 pt-1">
-              {/* Option 1: Uji Kecepatan / Speed Test */}
+          <div className={`md:hidden mt-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border transition-all animate-fadeIn shadow-2xl space-y-4 ${
+            isLight
+              ? 'bg-white border-slate-200 text-slate-800'
+              : 'bg-[#0f172a] border-slate-800 text-slate-100'
+          }`}>
+            {/* Clean Navigation Links List (SatsetReels Style: simple text, left-aligned, no bulky buttons) */}
+            <div className="flex flex-col space-y-1">
               <button
                 onClick={() => handleTabSelect('speedtest')}
-                className={`w-full flex items-center px-4 py-3 rounded-xl text-xs font-black transition-all cursor-pointer active:scale-[0.98] ${activeTab === 'speedtest'
-                    ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                className={`w-full text-left py-2.5 px-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                  activeTab === 'speedtest'
+                    ? 'text-cyan-600 dark:text-cyan-400 font-black bg-cyan-500/10'
                     : isLight
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-900'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-100'
-                  }`}
+                      ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
+                }`}
               >
-                <span className="tracking-wide uppercase">{t('navSpeedTest')}</span>
+                {lang === 'en' ? 'Home / Speed Test' : 'Beranda'}
               </button>
 
-              {/* Option 2: Stabilitas Jaringan / Network Stability */}
               <button
                 onClick={() => handleTabSelect('stability')}
-                className={`w-full flex items-center px-4 py-3 rounded-xl text-xs font-black transition-all cursor-pointer active:scale-[0.98] ${activeTab === 'stability'
-                    ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                className={`w-full text-left py-2.5 px-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                  activeTab === 'stability'
+                    ? 'text-cyan-600 dark:text-cyan-400 font-black bg-cyan-500/10'
                     : isLight
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-900'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-100'
-                  }`}
+                      ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
+                }`}
               >
-                <span className="tracking-wide uppercase">{t('navStability')}</span>
+                {lang === 'en' ? 'Network Stability' : 'Stabilitas Jaringan'}
               </button>
 
-              {/* Option 3: Riwayat / History */}
               <button
                 onClick={() => handleTabSelect('history')}
-                className={`w-full flex items-center px-4 py-3 rounded-xl text-xs font-black transition-all cursor-pointer active:scale-[0.98] ${activeTab === 'history'
-                    ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                className={`w-full text-left py-2.5 px-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                  activeTab === 'history'
+                    ? 'text-cyan-600 dark:text-cyan-400 font-black bg-cyan-500/10'
                     : isLight
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-900'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-100'
-                  }`}
+                      ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
+                }`}
               >
-                <span className="tracking-wide uppercase">{t('navHistory')}</span>
+                {lang === 'en' ? 'Test History' : 'Riwayat'}
               </button>
+
+              <button
+                onClick={() => handleTabSelect('tools')}
+                className={`w-full text-left py-2.5 px-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                  activeTab === 'tools'
+                    ? 'text-cyan-600 dark:text-cyan-400 font-black bg-cyan-500/10'
+                    : isLight
+                      ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {lang === 'en' ? 'Diagnostic Tools' : 'Alat Jaringan'}
+              </button>
+
+              {onOpenAbout && (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenAbout();
+                  }}
+                  className={`w-full text-left py-2.5 px-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                    isLight
+                      ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  {lang === 'en' ? 'About Us' : 'Tentang Kami'}
+                </button>
+              )}
+
+              {onOpenContact && (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenContact();
+                  }}
+                  className={`w-full text-left py-2.5 px-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                    isLight
+                      ? 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  {lang === 'en' ? 'Contact' : 'Hubungi Kami'}
+                </button>
+              )}
+            </div>
+
+            {/* Social Media Links: Instagram & TikTok (Official Links Requested by User) */}
+            <div className={`pt-3 border-t flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2.5 ${
+              isLight ? 'border-slate-200 text-slate-700' : 'border-slate-800 text-slate-300'
+            }`}>
+              <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Media Sosial:
+              </span>
+              <div className="flex items-center gap-2">
+                {/* Instagram Link */}
+                <a
+                  href="https://www.instagram.com/aaleano?rpxt=eGlsNnBveTkxbzl2&utm_source=qr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/20 transition-all cursor-pointer"
+                  title="Instagram @aaleano"
+                >
+                  <Instagram className="w-3.5 h-3.5" />
+                  <span>@aaleano</span>
+                </a>
+
+                {/* TikTok Link */}
+                <a
+                  href="https://www.tiktok.com/@aleeinhere"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 transition-all cursor-pointer"
+                  title="TikTok @aleeinhere"
+                >
+                  <TikTokIcon className="w-3.5 h-3.5" />
+                  <span>@aleeinhere</span>
+                </a>
+              </div>
             </div>
           </div>
         )}

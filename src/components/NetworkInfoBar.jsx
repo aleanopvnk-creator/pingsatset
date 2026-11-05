@@ -15,7 +15,7 @@ export default function NetworkInfoBar({
       const cached = localStorage.getItem('pingsatset_wifi_details');
       if (cached) return JSON.parse(cached);
     } catch (e) { }
-    const cachedName = (typeof localStorage !== 'undefined' && localStorage.getItem('pingsatset_wifi_name')) || 'Wi-Fi';
+    const cachedName = (typeof localStorage !== 'undefined' && localStorage.getItem('pingsatset_wifi_name')) || 'AP UTY Wifi';
     return {
       ssid: cachedName,
       signal: 89,
@@ -40,21 +40,37 @@ export default function NetworkInfoBar({
   });
   const [isScanning, setIsScanning] = useState(false);
 
-  // Fetch actual connected Wi-Fi info from local OS
+  // Fetch connected Wi-Fi info from local OS or fallback
   const fetchWifiInfo = async () => {
     setIsScanning(true);
     try {
       const res = await fetch('/api/wifi-info');
       if (res.ok) {
         const data = await res.json();
-        if (data && data.ssid) {
-          setWifiDetails(data);
-          setCustomSsid(data.ssid);
-          try {
-            localStorage.setItem('pingsatset_wifi_details', JSON.stringify(data));
-            localStorage.setItem('pingsatset_wifi_name', data.ssid);
-          } catch (err) { }
-          if (onWifiDetected) onWifiDetected(data.ssid);
+        if (data) {
+          const isGeneric = !data.ssid || data.ssid === 'Wi-Fi Terhubung' || data.ssid === 'Wi-Fi' || data.ssid === 'Wireless Interface';
+          
+          if (!isGeneric) {
+            setWifiDetails(data);
+            setCustomSsid(data.ssid);
+            try {
+              localStorage.setItem('pingsatset_wifi_details', JSON.stringify(data));
+              localStorage.setItem('pingsatset_wifi_name', data.ssid);
+            } catch (err) { }
+            if (onWifiDetected) onWifiDetected(data.ssid);
+          } else {
+            // Cloud environment (Vercel) / generic fallback
+            const resolvedName = customSsid || (typeof localStorage !== 'undefined' && localStorage.getItem('pingsatset_wifi_name')) || (ipInfo?.isp ? `${ipInfo.isp.split(/[\s,]+/)[0]} Wi-Fi` : 'AP UTY Wifi');
+            setWifiDetails(prev => ({
+              ...prev,
+              ...data,
+              ssid: resolvedName
+            }));
+            if (!customSsid) {
+              setCustomSsid(resolvedName);
+              if (onWifiDetected) onWifiDetected(resolvedName);
+            }
+          }
         }
       }
     } catch (e) {
@@ -66,7 +82,7 @@ export default function NetworkInfoBar({
 
   useEffect(() => {
     fetchWifiInfo();
-  }, []);
+  }, [ipInfo]);
 
   // Browser Network Information API listener
   useEffect(() => {
@@ -133,22 +149,34 @@ export default function NetworkInfoBar({
                 value={customSsid}
                 onChange={(e) => {
                   setCustomSsid(e.target.value);
+                  try {
+                    localStorage.setItem('pingsatset_wifi_name', e.target.value);
+                  } catch (err) {}
                   if (onWifiDetected) onWifiDetected(e.target.value);
                 }}
                 onBlur={() => setIsEditingSsid(false)}
                 onKeyDown={(e) => e.key === 'Enter' && setIsEditingSsid(false)}
                 className="w-full bg-slate-100 dark:bg-slate-950 text-xs font-black text-cyan-600 dark:text-cyan-400 border border-cyan-500 px-1 py-0.5 rounded focus:outline-none"
+                placeholder="Nama Wi-Fi Anda..."
                 autoFocus
               />
             ) : (
-              <div className="flex items-center justify-between min-w-0">
-                <span className="text-[11px] sm:text-xs font-black text-cyan-600 dark:text-cyan-400 truncate" title={currentSsid}>
+              <div 
+                className="flex items-center justify-between min-w-0 cursor-pointer group/ssid"
+                onClick={() => setIsEditingSsid(true)}
+                title="Klik untuk ubah nama Wi-Fi Anda"
+              >
+                <span className="text-[11px] sm:text-xs font-black text-cyan-600 dark:text-cyan-400 truncate group-hover/ssid:underline" title={currentSsid}>
                   {currentSsid}
                 </span>
                 <button
-                  onClick={() => setIsEditingSsid(true)}
-                  className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 ml-1 shrink-0 cursor-pointer"
-                  title={t('manualEditTitle')}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsEditingSsid(true);
+                  }}
+                  className="text-slate-500 hover:text-cyan-500 dark:text-slate-400 dark:hover:text-cyan-400 ml-1 shrink-0 p-0.5 rounded cursor-pointer transition-colors"
+                  title="Ubah nama Wi-Fi Anda"
                 >
                   <Edit3 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>

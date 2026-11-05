@@ -111,9 +111,11 @@ export default function App() {
   });
   const [detectedWifiName, setDetectedWifiName] = useState(() => {
     try {
-      return localStorage.getItem('pingsatset_wifi_name') || 'Wi-Fi';
+      const saved = localStorage.getItem('pingsatset_wifi_name');
+      if (saved && saved !== 'Wi-Fi Terhubung' && saved !== 'Wi-Fi') return saved;
+      return 'AP UTY Wifi';
     } catch (e) {
-      return 'Wi-Fi';
+      return 'AP UTY Wifi';
     }
   });
 
@@ -398,6 +400,8 @@ export default function App() {
         theme={theme}
         toggleTheme={toggleTheme}
         wifiName={detectedWifiName}
+        onOpenAbout={() => setIsAboutOpen(true)}
+        onOpenContact={() => setIsContactOpen(true)}
       />
 
       {/* Main Container */}

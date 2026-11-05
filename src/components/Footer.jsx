@@ -251,14 +251,14 @@ export default function Footer({
 
               {/* Social Media Buttons (Clean Dark Slate with Cyan Glow Hover) */}
               <div className="pt-2 flex items-center gap-2.5">
-                {/* Instagram */}
+                {/* Instagram: @aaleano */}
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/aaleano?rpxt=eGlsNnBveTkxbzl2&utm_source=qr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-300 hover:text-cyan-500 hover:border-cyan-500 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition-all shadow-xs cursor-pointer"
-                  title="Instagram"
-                  aria-label="Instagram"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-300 hover:text-pink-500 hover:border-pink-500 hover:bg-pink-50 dark:hover:bg-pink-500/10 transition-all shadow-xs cursor-pointer"
+                  title="Instagram: @aaleano"
+                  aria-label="Instagram @aaleano"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
@@ -267,14 +267,14 @@ export default function Footer({
                   </svg>
                 </a>
 
-                {/* TikTok */}
+                {/* TikTok: @aleeinhere */}
                 <a
-                  href="https://tiktok.com"
+                  href="https://www.tiktok.com/@aleeinhere"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-300 hover:text-cyan-500 hover:border-cyan-500 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition-all shadow-xs cursor-pointer"
-                  title="TikTok"
-                  aria-label="TikTok"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-300 hover:text-cyan-400 hover:border-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition-all shadow-xs cursor-pointer"
+                  title="TikTok: @aleeinhere"
+                  aria-label="TikTok @aleeinhere"
                 >
                   <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.34 22a6.34 6.34 0 0 0 6.34-6.33V9.05a8.16 8.16 0 0 0 4.91 1.63v-3.5a4.85 4.85 0 0 1-1-.49z"/>
