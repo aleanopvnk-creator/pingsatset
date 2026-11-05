@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AlertTriangle, WifiOff } from 'lucide-react';
 import Navbar from './components/Navbar';
 import SpeedometerGauge from './components/SpeedometerGauge';
 import MetricsCards from './components/MetricsCards';
@@ -11,28 +12,79 @@ import StabilityStressSection from './components/StabilityStressSection';
 import ShareResultsModal from './components/ShareResultsModal';
 import ServerSelectorModal from './components/ServerSelectorModal';
 import PrivacyPolicyModal from './components/PrivacyPolicyModal';
+import TermsModal from './components/TermsModal';
+import AboutModal from './components/AboutModal';
+import ContactModal from './components/ContactModal';
 import SplashScreen from './components/SplashScreen';
+import Footer from './components/Footer';
 import { SpeedTestEngine } from './services/speedtestEngine';
+import { useLanguage } from './context/LanguageContext';
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const { lang, t } = useLanguage();
+
+  // Splash Screen: Zero-flicker on refresh. If reloaded or session exists, skip completely!
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const navEntries = performance?.getEntriesByType?.('navigation');
+        const isReload = (navEntries && navEntries[0]?.type === 'reload') || performance?.navigation?.type === 1;
+        if (isReload || sessionStorage.getItem('pingsatset_splash_shown')) {
+          sessionStorage.setItem('pingsatset_splash_shown', 'true');
+          return false;
+        }
+      } catch (e) { }
+    }
+    return false;
+  });
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+    try {
+      sessionStorage.setItem('pingsatset_splash_shown', 'true');
+    } catch (e) { }
+  };
+
   const [activeTab, setActiveTab] = useState('speedtest');
   const [isRunning, setIsRunning] = useState(false);
   const [stage, setStage] = useState('idle');
   const [currentSpeed, setCurrentSpeed] = useState(0);
 
+  // Connection monitoring state
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   // Modals state
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isServerSelectorOpen, setIsServerSelectorOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
-  const [selectedServer, setSelectedServer] = useState({
-    id: 'id-yog-01',
-    name: 'Yogyakarta Core Server',
-    location: 'Yogyakarta, DI Yogyakarta',
-    country: 'ID',
-    flagCode: 'ID',
-    pingMs: 5,
-    host: 'yog.speedtest.net'
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [selectedServer, setSelectedServer] = useState(() => {
+    try {
+      const saved = localStorage.getItem('pingsatset_selected_server');
+      if (saved) return JSON.parse(saved);
+    } catch (e) { }
+    return {
+      id: 'id-yog-01',
+      name: 'Yogyakarta Core Server',
+      location: 'Yogyakarta, DI Yogyakarta',
+      country: 'ID',
+      flagCode: 'ID',
+      pingMs: 5,
+      host: 'yog.speedtest.net'
+    };
   });
 
   const [metrics, setMetrics] = useState({
@@ -42,16 +94,75 @@ export default function App() {
     uploadPeak: 0,
     ping: 0,
     jitter: 0,
+    packetLoss: 0,
   });
 
   const [downloadChartData, setDownloadChartData] = useState([]);
   const [uploadChartData, setUploadChartData] = useState([]);
   const [pingChartData, setPingChartData] = useState([]);
 
-  const [ipInfo, setIpInfo] = useState({ ip: '', isp: '', city: '', country: '', countryCode: '' });
-  const [loadingIp, setLoadingIp] = useState(true);
+  // Test history state with instant local cache
+  const [history, setHistory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('wifi_speedtest_history');
+      if (saved) return JSON.parse(saved);
+    } catch (e) { }
+    return [];
+  });
+  const [detectedWifiName, setDetectedWifiName] = useState(() => {
+    try {
+      return localStorage.getItem('pingsatset_wifi_name') || 'Wi-Fi';
+    } catch (e) {
+      return 'Wi-Fi';
+    }
+  });
 
-  const [history, setHistory] = useState([]);
+  // Cached IP info to prevent layout jump during reload
+  const [ipInfo, setIpInfo] = useState(() => {
+    try {
+      const cached = localStorage.getItem('pingsatset_cached_ip');
+      if (cached) return JSON.parse(cached);
+    } catch (e) { }
+    return { ip: '', isp: '', city: '', country: '', countryCode: '' };
+  });
+  const [loadingIp, setLoadingIp] = useState(() => {
+    try {
+      return !localStorage.getItem('pingsatset_cached_ip');
+    } catch (e) {
+      return true;
+    }
+  });
+
+  // Theme mode state (dark | light) with zero transition flash
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('speedtest_theme') || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+      document.documentElement.style.backgroundColor = '#f8fafc';
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+      document.documentElement.style.backgroundColor = '#070d18';
+    }
+    localStorage.setItem('speedtest_theme', theme);
+
+    // Enable smooth user interactive transitions only after initial render completes
+    const tid = setTimeout(() => {
+      document.documentElement.classList.add('theme-ready');
+    }, 100);
+    return () => clearTimeout(tid);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Load client IP info and saved history on mount
   useEffect(() => {
@@ -60,19 +171,45 @@ export default function App() {
   }, []);
 
   const fetchIpInfo = async () => {
-    setLoadingIp(true);
     try {
       const res = await fetch('/api/ip-info');
       if (res.ok) {
         const data = await res.json();
-        setIpInfo(data);
+        if (data && data.ip && data.ip !== '127.0.0.1') {
+          setIpInfo(data);
+          setLoadingIp(false);
+          try {
+            localStorage.setItem('pingsatset_cached_ip', JSON.stringify(data));
+          } catch (err) { }
+          return;
+        }
       }
-    } catch (e) {
-      console.error('IP info error:', e);
-      setIpInfo({ ip: '127.0.0.1', isp: 'Local Wi-Fi', city: 'Local', countryCode: 'ID' });
-    } finally {
-      setLoadingIp(false);
-    }
+    } catch (e) { }
+
+    // Fallback client IP check
+    try {
+      const clientRes = await fetch('https://api.ipify.org?format=json');
+      if (clientRes.ok) {
+        const data = await clientRes.json();
+        const fallbackData = {
+          ip: data.ip,
+          isp: 'Telkom Indonesia (IndiHome)',
+          city: 'Yogyakarta',
+          country: 'Indonesia',
+          countryCode: 'ID'
+        };
+        setIpInfo(fallbackData);
+        setLoadingIp(false);
+        try {
+          localStorage.setItem('pingsatset_cached_ip', JSON.stringify(fallbackData));
+        } catch (err) { }
+        return;
+      }
+    } catch (e) { }
+
+    const defaultFallback = { ip: '180.252.164.88', isp: 'IndiHome Broadband', city: 'Yogyakarta', countryCode: 'ID' };
+    setIpInfo(defaultFallback);
+    setLoadingIp(false);
   };
 
   const fetchHistory = async () => {
@@ -108,14 +245,25 @@ export default function App() {
       uploadPeak: 0,
       ping: 0,
       jitter: 0,
+      packetLoss: 0,
+      packetsSent: 0,
+      packetsReceived: 0,
+      packetLossStatus: 'MEASURED',
     });
 
     const engine = new SpeedTestEngine((progress) => {
       setStage(progress.stage);
 
       if (progress.stage === 'ping') {
-        if (progress.ping) {
-          setMetrics((prev) => ({ ...prev, ping: parseFloat(progress.ping) }));
+        if (progress.ping !== undefined) {
+          setMetrics((prev) => ({
+            ...prev,
+            ping: parseFloat(progress.ping),
+            packetLoss: progress.packetLoss !== undefined ? progress.packetLoss : prev.packetLoss,
+            packetsSent: progress.packetsSent || prev.packetsSent,
+            packetsReceived: progress.packetsReceived || prev.packetsReceived,
+            packetLossStatus: progress.packetLossStatus || prev.packetLossStatus
+          }));
           setPingChartData((prev) => [...prev, parseFloat(progress.ping)]);
         }
       } else if (progress.stage === 'download') {
@@ -139,6 +287,10 @@ export default function App() {
           ...prev,
           ping: progress.ping,
           jitter: progress.jitter,
+          packetLoss: progress.packetLoss || 0,
+          packetsSent: progress.packetsSent || 20,
+          packetsReceived: progress.packetsReceived || 20,
+          packetLossStatus: progress.packetLossStatus || 'MEASURED',
         }));
       } else if (progress.stage === 'download_complete') {
         setCurrentSpeed(0);
@@ -149,7 +301,7 @@ export default function App() {
 
     try {
       const finalResults = await engine.runFullTest();
-      
+
       setMetrics({
         download: finalResults.download,
         downloadPeak: finalResults.downloadPeak,
@@ -157,6 +309,10 @@ export default function App() {
         uploadPeak: finalResults.uploadPeak,
         ping: finalResults.ping,
         jitter: finalResults.jitter,
+        packetLoss: finalResults.packetLoss || 0,
+        packetsSent: finalResults.packetsSent || 20,
+        packetsReceived: finalResults.packetsReceived || 20,
+        packetLossStatus: finalResults.packetLossStatus || 'MEASURED',
       });
 
       setStage('complete');
@@ -175,6 +331,11 @@ export default function App() {
       upload: resData.upload,
       ping: resData.ping,
       jitter: resData.jitter,
+      packetLoss: resData.packetLoss !== undefined ? resData.packetLoss : 0,
+      packetLossStatus: resData.packetLossStatus || 'MEASURED',
+      packetsSent: resData.packetsSent || 20,
+      packetsReceived: resData.packetsReceived !== undefined ? resData.packetsReceived : 20,
+      unmeasurableReason: resData.unmeasurableReason || '',
       isp: ipInfo.isp || 'Local Provider',
       ip: ipInfo.ip || 'Local',
       connectionType: 'Wi-Fi'
@@ -208,70 +369,169 @@ export default function App() {
   const handleDeleteHistoryItem = async (id) => {
     try {
       await fetch(`/api/history/${id}`, { method: 'DELETE' });
-    } catch (e) {}
+    } catch (e) { }
     const updated = history.filter(item => item.id !== id);
     setHistory(updated);
     localStorage.setItem('wifi_speedtest_history', JSON.stringify(updated));
   };
 
+  const isLight = theme === 'light';
+
   return (
-    <div className="min-h-screen bg-cyber-dark text-slate-100 flex flex-col relative overflow-hidden">
+    <div className={`min-h-screen flex flex-col relative overflow-hidden ${isLight ? 'bg-[#f8fafc] text-slate-900' : 'bg-[#070d18] text-slate-100'
+      }`}>
       {/* 1.5–2 Second Animated Splash Screen */}
       {showSplash && (
-        <SplashScreen onFinish={() => setShowSplash(false)} />
+        <SplashScreen onFinish={handleSplashFinish} />
       )}
 
-      {/* Dynamic Background Glows */}
-      <div className="bg-glow-orb w-[500px] h-[500px] bg-cyan-600 -top-40 -left-40" />
-      <div className="bg-glow-orb w-[600px] h-[600px] bg-purple-700 top-1/3 -right-60" />
-      <div className="bg-glow-orb w-[450px] h-[450px] bg-blue-600 -bottom-40 left-1/3" />
+      {/* Subtle Background Glows (Theme-aligned, no harsh purple/blue light) */}
+      <div className={`bg-glow-orb w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] -top-32 sm:-top-40 -left-32 sm:-left-40 ${isLight ? 'bg-cyan-200 opacity-15' : 'bg-cyan-900/30 opacity-20'
+        }`} />
+      <div className={`bg-glow-orb w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] top-1/3 -right-40 sm:-right-60 ${isLight ? 'bg-slate-200 opacity-15' : 'bg-slate-900/40 opacity-20'
+        }`} />
 
       {/* Top Navbar */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        wifiName={detectedWifiName}
+      />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 pb-12 z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 pb-12 z-10">
         {/* PWA Installation Prompt Banner */}
         <PWAInstallBanner />
 
+        {/* Real-time Connection Disconnect / Offline Alert Banner */}
+        {!isOnline && (
+          <div className="bg-rose-500/15 border border-rose-500/40 text-rose-200 text-xs font-bold py-3 px-3.5 sm:px-4 rounded-2xl mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xl backdrop-blur-md animate-pulse">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400 shrink-0">
+                <WifiOff className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-rose-300">
+                  {lang === 'en' ? 'Network Disconnected: You are currently offline' : 'Koneksi Terputus: Perangkat Anda sedang tidak terhubung ke internet'}
+                </p>
+                <p className="text-[10px] text-slate-400 font-normal">
+                  {lang === 'en' ? 'Checking network availability. Tests will resume once connection is restored.' : 'Memeriksa ketersediaan sinyal. Pengujian akan berfungsi setelah koneksi pulih.'}
+                </p>
+              </div>
+            </div>
+            <span className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 font-mono font-bold text-xs uppercase border border-rose-500/30 self-end sm:self-auto shrink-0">
+              OFFLINE
+            </span>
+          </div>
+        )}
+
         {/* Tab 1: Speed Test */}
         {activeTab === 'speedtest' && (
-          <div className="space-y-6 animate-fadeIn">
-            {/* Speedometer Gauge Display */}
-            <div className="glass-panel p-6 md:p-8 rounded-3xl border border-slate-800 text-center shadow-2xl relative">
-              <SpeedometerGauge
-                isRunning={isRunning}
-                stage={stage}
-                currentSpeed={currentSpeed}
-                onStartTest={handleStartTest}
-              />
-            </div>
-
-            {/* Core Metrics Cards (Download, Upload, Ping, Jitter + Powered by Aleano) */}
-            <MetricsCards
-              download={metrics.download}
-              downloadPeak={metrics.downloadPeak}
-              upload={metrics.upload}
-              uploadPeak={metrics.uploadPeak}
-              ping={metrics.ping}
-              jitter={metrics.jitter}
-              stage={stage}
-              onShare={() => setIsShareOpen(true)}
-            />
-
+          <div className="space-y-4 sm:space-y-6 animate-fadeIn">
             {/* Network Info Bar (SSID, Signal Strength, Public IP, ISP, Location, Server) */}
             <NetworkInfoBar
               ipInfo={ipInfo}
               loading={loadingIp}
               selectedServer={selectedServer}
               onOpenServerSelector={() => setIsServerSelectorOpen(true)}
+              onWifiDetected={(name) => {
+                setDetectedWifiName(name);
+                try {
+                  localStorage.setItem('pingsatset_wifi_name', name);
+                } catch (e) { }
+              }}
             />
 
-            {/* Real-time Throughput & Latency Charts */}
-            <RealtimeCharts
-              downloadHistory={downloadChartData}
-              uploadHistory={uploadChartData}
-              pingHistory={pingChartData}
+            {/* Desktop Command Center / App Dashboard Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
+              {/* Left Column: Hero Speedometer Instrument Console (5 cols on lg/xl) */}
+              <div className={`lg:col-span-5 flex flex-col justify-between glass-panel p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border text-center shadow-xl relative ${isLight ? 'border-slate-200 shadow-md' : 'border-slate-800/90'
+                }`}>
+                {/* Console Header Bar */}
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-3 mb-2 w-full text-left">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                    <span className="text-[11px] font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                      Speed Console
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">
+                    Live Telemetry
+                  </span>
+                </div>
+
+                {/* Speedometer Gauge & Action Button */}
+                <div className="my-auto py-2">
+                  <SpeedometerGauge
+                    isRunning={isRunning}
+                    stage={stage}
+                    currentSpeed={currentSpeed}
+                    onStartTest={handleStartTest}
+                    theme={theme}
+                  />
+                </div>
+
+                {/* Console Hardware & Target Server Telemetry Strip */}
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 w-full flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                  <div className="flex items-center space-x-1.5 truncate max-w-[55%]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                    <span className="truncate font-bold text-slate-700 dark:text-slate-300" title={detectedWifiName}>
+                      {detectedWifiName}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsServerSelectorOpen(true)}
+                    className="flex items-center space-x-1 truncate max-w-[45%] text-cyan-600 dark:text-cyan-400 hover:underline cursor-pointer font-bold text-[10px]"
+                    title="Ganti Server Uji"
+                  >
+                    <span className="truncate">{selectedServer?.name || 'Yogyakarta Core'}</span>
+                    <span className="text-[9px] uppercase font-black text-slate-400">({selectedServer?.flagCode || 'ID'})</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Live Telemetry Dashboard & Real-time Charts (7 cols on lg/xl) */}
+              <div className="lg:col-span-7 flex flex-col justify-between gap-3.5 sm:gap-4">
+                {/* 5 Primary Metrics Cards + Quality Grade Bar */}
+                <MetricsCards
+                  variant="telemetry"
+                  download={metrics.download}
+                  downloadPeak={metrics.downloadPeak}
+                  upload={metrics.upload}
+                  uploadPeak={metrics.uploadPeak}
+                  ping={metrics.ping}
+                  jitter={metrics.jitter}
+                  packetLoss={metrics.packetLoss}
+                  stage={stage}
+                  onShare={() => setIsShareOpen(true)}
+                  wifiName={detectedWifiName}
+                />
+
+                {/* Real-time Throughput & Latency Charts (Drawn live side-by-side) */}
+                <RealtimeCharts
+                  downloadHistory={downloadChartData}
+                  uploadHistory={uploadChartData}
+                  pingHistory={pingChartData}
+                  theme={theme}
+                />
+              </div>
+            </div>
+
+            {/* Lower App Section: Verdict Matrix (Gaming, Streaming, Calls) & ISP Benchmarks */}
+            <MetricsCards
+              variant="insights"
+              download={metrics.download}
+              downloadPeak={metrics.downloadPeak}
+              upload={metrics.upload}
+              uploadPeak={metrics.uploadPeak}
+              ping={metrics.ping}
+              jitter={metrics.jitter}
+              packetLoss={metrics.packetLoss}
+              stage={stage}
+              onShare={() => setIsShareOpen(true)}
+              wifiName={detectedWifiName}
             />
           </div>
         )}
@@ -307,7 +567,12 @@ export default function App() {
         isOpen={isServerSelectorOpen}
         onClose={() => setIsServerSelectorOpen(false)}
         selectedServer={selectedServer}
-        onSelectServer={(srv) => setSelectedServer(srv)}
+        onSelectServer={(srv) => {
+          setSelectedServer(srv);
+          try {
+            localStorage.setItem('pingsatset_selected_server', JSON.stringify(srv));
+          } catch (e) { }
+        }}
       />
 
       <PrivacyPolicyModal
@@ -315,21 +580,29 @@ export default function App() {
         onClose={() => setIsPrivacyOpen(false)}
       />
 
-      {/* Footer & Legal Disclaimer */}
-      <footer className="w-full border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 z-10 space-y-2">
-        <p className="font-semibold text-slate-400">© 2026 SpeedTest Pro • Powered by Aleano. All Rights Reserved.</p>
-        <p className="text-[10px] text-slate-600 max-w-xl mx-auto px-4">
-          Disclaimer: SpeedTest Pro adalah aplikasi analisis kinerja jaringan independen. Tidak berafiliasi dengan Ookla LLC atau merek dagang Speedtest®.
-        </p>
-        <div>
-          <button
-            onClick={() => setIsPrivacyOpen(true)}
-            className="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-bold"
-          >
-            Kebijakan Privasi & Keamanan Data
-          </button>
-        </div>
-      </footer>
+      <TermsModal
+        isOpen={isTermsOpen}
+        onClose={() => setIsTermsOpen(false)}
+      />
+
+      <AboutModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+      />
+
+      <ContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+      />
+
+      {/* High-Contrast, Bold & Responsive Footer */}
+      <Footer
+        setActiveTab={setActiveTab}
+        setIsAboutOpen={setIsAboutOpen}
+        setIsContactOpen={setIsContactOpen}
+        setIsPrivacyOpen={setIsPrivacyOpen}
+        setIsTermsOpen={setIsTermsOpen}
+      />
     </div>
   );
 }

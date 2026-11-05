@@ -2,23 +2,229 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Anti-Flicker: Disable all transitions on initial page load / refresh */
+html:not(.theme-ready) *,
+html:not(.theme-ready) body {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+}
+
 @layer base {
+  html {
+    background-color: #070d18;
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html.light {
+    background-color: #f8fafc;
+    color-scheme: light;
+  }
+
   body {
-    font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: #0a0d14;
+    font-family: 'Outfit', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #070d18;
     color: #f1f5f9;
+    font-weight: 700;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+  }
+
+  /* Smooth transition enabled ONLY after page finishes initial render */
+  html.theme-ready body {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  html.light body {
+    background-color: #f8fafc;
+    color: #020617;
+    font-weight: 700;
+  }
+
+  button, 
+  [role="button"], 
+  a, 
+  input, 
+  select {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button, [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 900 !important;
+  }
+
+  th {
+    font-weight: 900 !important;
+  }
+
+  p, span, label, input, button {
+    font-weight: 700;
   }
 }
 
-/* Glassmorphism Styles */
+/* Glassmorphism Styles for Dark Mode (Deep contrast & clear borders) */
 .glass-panel {
-  background: rgba(18, 24, 36, 0.7);
+  background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
+/* Glassmorphism Styles for Light Mode (Crisp, High Contrast, Solid Borders, Bold) */
+html.light .glass-panel {
+  background: #ffffff !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Light Mode: Surfaces & Card Sub-Panels */
+html.light .bg-slate-900,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-950,
+html.light .bg-slate-950\/40,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/90 {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .border-slate-800,
+html.light .border-slate-800\/80,
+html.light .border-slate-700,
+html.light .border-slate-700\/60,
+html.light .border-slate-700\/50 {
+  border-color: #cbd5e1 !important;
+}
+
+/* Light Mode Typography: Maximum Contrast & Bold */
+html.light h1:not(.btn-text),
+html.light h2:not(.btn-text),
+html.light h3:not(.btn-text),
+html.light h4:not(.btn-text) {
+  color: #020617 !important;
+  font-weight: 900 !important;
+}
+
+html.light .text-white:not(.keep-white) {
+  color: #020617 !important;
+  font-weight: 800 !important;
+}
+
+html.light .text-slate-100 {
+  color: #020617 !important;
+  font-weight: 800 !important;
+}
+
+html.light .text-slate-200 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.light .text-slate-300 {
+  color: #1e293b !important;
+  font-weight: 800 !important;
+}
+
+html.light .text-slate-400 {
+  color: #334155 !important;
+  font-weight: 700 !important;
+}
+
+html.light .text-slate-500 {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+html.light .text-slate-600 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* Dark Mode Typography: High Contrast, Bright & Bold */
+html.dark .text-slate-400,
+:not(html.light) .text-slate-400 {
+  color: #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+html.dark .text-slate-500,
+:not(html.light) .text-slate-500 {
+  color: #94a3b8 !important;
+  font-weight: 700 !important;
+}
+
+html.dark .text-slate-600,
+:not(html.light) .text-slate-600 {
+  color: #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+html.dark .text-slate-300,
+:not(html.light) .text-slate-300 {
+  color: #e2e8f0 !important;
+  font-weight: 700 !important;
+}
+
+html.dark .text-slate-200,
+:not(html.light) .text-slate-200 {
+  color: #f1f5f9 !important;
+  font-weight: 800 !important;
+}
+
+html.dark .text-slate-100,
+:not(html.light) .text-slate-100 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* Light Mode: Retain White text inside colored Gradient & CTA Buttons */
+html.light .keep-white,
+html.light .keep-white *,
+html.light .bg-gradient-cyber,
+html.light .bg-gradient-cyber *,
+html.light button[class*="from-blue-600"],
+html.light button[class*="from-blue-600"] *,
+html.light button[class*="from-rose-600"],
+html.light button[class*="from-rose-600"] *,
+html.light .bg-rose-500,
+html.light .bg-rose-500 *,
+html.light .bg-rose-600,
+html.light .bg-rose-600 * {
+  color: #ffffff !important;
+}
+
+/* Light Mode: Retain Pitch-Black text inside Glowing Cyan buttons */
+html.light .bg-cyan-400,
+html.light .bg-cyan-400 *,
+html.light .bg-cyan-500,
+html.light .bg-cyan-500 * {
+  color: #020617 !important;
+}
+
+/* Hover States */
 .glass-panel-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -30,27 +236,27 @@
   box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.2);
 }
 
-.glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+html.light .glass-panel-hover:hover {
+  background: #ffffff !important;
+  border-color: #06b6d4 !important;
+  box-shadow: 0 8px 25px -4px rgba(6, 182, 212, 0.15) !important;
 }
 
 /* Cyber Gradients & Glows */
 .text-gradient-cyan {
-  background: linear-gradient(135deg, #38bdf8 0%, #06b6d4 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #06b6d4 50%, #0891b2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-emerald {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-purple {
-  background: linear-gradient(135deg, #c084fc 0%, #8b5cf6 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #ec4899 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -71,6 +277,10 @@
   pointer-events: none;
   opacity: 0.25;
   z-index: 0;
+}
+
+html.light .bg-glow-orb {
+  opacity: 0.12;
 }
 
 /* Wi-Fi Wave & Radar Sweep Animations */
@@ -120,11 +330,117 @@
   background: #0a0d14;
 }
 
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 4px;
 }
 
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* SplashScreen Strict Isolation & Maximum Bold Elements */
+html.light .splash-screen,
+html.dark .splash-screen,
+.splash-screen {
+  background-color: #070a10 !important;
+  color: #ffffff !important;
+}
+
+html.light .splash-screen h1,
+html.light .splash-screen h1 span,
+.splash-screen h1,
+.splash-screen h1 span {
+  font-weight: 900 !important;
+}
+
+html.light .splash-screen h1 span:first-child,
+.splash-screen h1 span:first-child {
+  color: #ffffff !important;
+}
+
+html.light .splash-screen .bg-slate-900,
+html.light .splash-screen .bg-slate-950,
+.splash-screen .bg-slate-900,
+.splash-screen .bg-slate-950 {
+  background-color: #090d16 !important;
+}
+
+/* Footer: 100% Matched to SatsetReels Style (Light & Dark) */
+html.light footer {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Headings: Glowing cyber cyan light ONLY on headings in Dark Mode, Bold Slate in Light Mode */
+.footer-heading-glow {
+  letter-spacing: 0.05em;
+  font-weight: 900 !important;
+}
+
+html.dark .footer-heading-glow,
+:not(html.light) .footer-heading-glow {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.75), 0 0 20px rgba(6, 182, 212, 0.4);
+  -webkit-text-stroke: 0px !important;
+}
+
+html.light .footer-heading-glow {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0px !important;
+}
+
+/* Muted / Redup Links Underneath Headings (SatsetReels Style) */
+html.dark footer .footer-muted-link,
+:not(html.light) footer .footer-muted-link {
+  color: #94a3b8 !important; /* Soft dimmed slate / 'warna putih redup' */
+  font-weight: 500 !important;
+}
+
+html.dark footer .footer-muted-link:hover,
+:not(html.light) footer .footer-muted-link:hover {
+  color: #22d3ee !important;
+}
+
+html.light footer .footer-muted-link {
+  color: #475569 !important;
+  font-weight: 500 !important;
+}
+
+html.light footer .footer-muted-link:hover {
+  color: #0891b2 !important;
+}
+
+/* Tagline, Disclaimer, and Copyright */
+html.dark footer .footer-tagline,
+html.dark footer .footer-disclaimer,
+html.dark footer .footer-copyright,
+:not(html.light) footer .footer-tagline,
+:not(html.light) footer .footer-disclaimer,
+:not(html.light) footer .footer-copyright {
+  color: #94a3b8 !important;
+}
+
+html.light footer .footer-tagline,
+html.light footer .footer-disclaimer,
+html.light footer .footer-copyright {
+  color: #64748b !important;
+}
+
+

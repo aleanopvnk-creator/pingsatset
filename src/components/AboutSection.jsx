@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Code, Zap, Shield, Globe, Cpu, Heart, CheckCircle2, Sparkles, Smartphone } from 'lucide-react';
+import { User, Code, Activity, Shield, Globe, Cpu, Heart, CheckCircle2, Sparkles, Smartphone } from 'lucide-react';
 
 export default function AboutSection() {
   return (
@@ -13,12 +13,12 @@ export default function AboutSection() {
         </div>
         <div className="text-center md:text-left">
           <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-extrabold uppercase tracking-wider mb-2">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Developer & Engineer</span>
+            <Code className="w-3.5 h-3.5" />
+            <span>Core Engineering Team</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-black text-white">Aleano</h2>
+          <h2 className="text-2xl md:text-3xl font-black text-white">PingSatSet Network Lab</h2>
           <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-xl">
-            Pengembang perangkat lunak & web modern yang berfokus pada performa tinggi, desain UI/UX interaktif, serta solusi aplikasi web lintas platform.
+            Platform independen pemantauan dan analisis performa jaringan berkecepatan tinggi dengan fokus pada transparansi, akurasi real-time, dan privasi penuh.
           </p>
         </div>
       </div>
@@ -27,10 +27,10 @@ export default function AboutSection() {
       <div className="space-y-3">
         <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center space-x-2">
           <Globe className="w-5 h-5 text-purple-400" />
-          <span>Tentang WiFi SpeedTest Pro</span>
+          <span>Tentang PingSatSet</span>
         </h3>
         <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-          <strong>WiFi SpeedTest Pro</strong> adalah aplikasi untuk mengukur kecepatan dan stabilitas koneksi internet secara akurat. Menampilkan Download, Upload, Ping, dan Jitter secara real-time dengan tampilan modern dan responsif.
+          <strong>PingSatSet</strong> adalah platform aplikasi untuk mengukur kecepatan dan stabilitas koneksi internet secara akurat, real-time, dan sat-set. Menampilkan Download, Upload, Ping, Jitter, dan Packet Loss dengan tampilan modern serta responsif.
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export default function AboutSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="glass-panel p-4 rounded-2xl border border-slate-800/80 space-y-2">
           <div className="p-2.5 w-max rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-            <Zap className="w-5 h-5" />
+            <Activity className="w-5 h-5" />
           </div>
           <h4 className="text-sm font-bold text-white">Real-Time Streaming</h4>
           <p className="text-xs text-slate-400">
@@ -86,8 +86,8 @@ export default function AboutSection() {
       {/* Footer Branding Note */}
       <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-purple-950/40 to-slate-900 border border-cyan-500/20 text-center">
         <p className="text-xs text-slate-300 flex items-center justify-center space-x-1.5 font-medium">
-          <span>Dikembangkan oleh</span>
-          <span className="text-gradient-cyan font-black">Aleano</span>
+          <span>Dikembangkan secara independen oleh</span>
+          <span className="text-gradient-cyan font-black">PingSatSet Team</span>
         </p>
       </div>
     </div>

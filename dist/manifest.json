@@ -1,7 +1,7 @@
 {
-  "short_name": "SpeedTest",
-  "name": "WiFi SpeedTest Pro PWA",
-  "description": "Aplikasi pengukur kecepatan WiFi (Download, Upload, Ping, Jitter) secara real-time dan responsif.",
+  "short_name": "PingSatSet",
+  "name": "PingSatSet - Super Fast Wi-Fi Speed Test",
+  "description": "Aplikasi pengukur kecepatan WiFi dan internet super cepat sat-set (Unduh, Unggah, Ping, Jitter) secara real-time dan responsif.",
   "icons": [
     {
       "src": "/icon-192.png",
