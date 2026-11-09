@@ -7,19 +7,9 @@ import {
   Moon,
   Menu,
   X,
-  Globe,
-  Wifi,
-  Instagram
+  Globe
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-
-function TikTokIcon({ className = "w-3.5 h-3.5" }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.34 22a6.34 6.34 0 0 0 6.34-6.33V9.05a8.16 8.16 0 0 0 4.91 1.63v-3.5a4.85 4.85 0 0 1-1-.49z" />
-    </svg>
-  );
-}
 
 export default function Navbar({
   activeTab,
@@ -172,17 +162,17 @@ export default function Navbar({
             </button>
           </div>
 
-          {/* Right: Mobile Pill Controls (SatsetReels Style: [ 🌐 ID ] [ 🌙 ] [ ☰ ]) */}
+          {/* Right: Mobile Pill Controls (Clean SatsetReels Style: [ 🌐 ID ] [ 🌙 ] [ ☰ ]) */}
           <div className="flex md:hidden items-center gap-1.5 xs:gap-2 shrink-0">
-            {/* 1. Language Pill: [ 🌐 ID / EN ] */}
+            {/* 1. Language Pill: [ 🌐 ID / EN ] - Distinct Single Language Switch */}
             <button
               onClick={toggleLanguage}
               className={`px-2.5 py-1.5 rounded-xl border font-black text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 ${isLight
                   ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-900'
                   : 'bg-slate-900 hover:bg-slate-800 border-slate-700 text-white'
                 }`}
-              title="Ganti Bahasa / Switch Language"
-              aria-label="Switch Language"
+              title={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
+              aria-label={lang === 'en' ? 'Switch to Indonesian' : 'Switch to English'}
             >
               <Globe className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 stroke-[2.5]" />
               <span className="font-mono text-[11px] font-black uppercase text-cyan-700 dark:text-cyan-300">
@@ -197,8 +187,8 @@ export default function Navbar({
                   ? 'bg-white hover:bg-slate-50 border-slate-300 text-slate-900'
                   : 'bg-slate-900 hover:bg-slate-800 border-slate-700 text-white'
                 }`}
-              title="Toggle Theme"
-              aria-label="Toggle Theme"
+              title={isLight ? (lang === 'en' ? 'Switch to Dark Mode' : 'Ganti ke Mode Gelap') : (lang === 'en' ? 'Switch to Light Mode' : 'Ganti ke Mode Terang')}
+              aria-label={isLight ? 'Dark Mode' : 'Light Mode'}
             >
               {isLight ? (
                 <Moon className="w-4 h-4 text-slate-800 stroke-[2.5]" />
@@ -218,7 +208,7 @@ export default function Navbar({
                     ? 'bg-cyan-950/60 border-cyan-500 text-cyan-400'
                     : 'bg-slate-900 hover:bg-slate-800 border-slate-700 text-white'
                 }`}
-              title="Menu"
+              title={lang === 'en' ? 'Menu' : 'Menu'}
               aria-label="Menu"
             >
               {isMobileMenuOpen ? (
@@ -231,14 +221,14 @@ export default function Navbar({
 
         </div>
 
-        {/* SatsetReels Style Mobile Dropdown Menu */}
+        {/* SatsetReels Style Mobile Dropdown Menu (No Medsos in Hamburger as requested) */}
         {isMobileMenuOpen && (
-          <div className={`md:hidden mt-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border transition-all animate-fadeIn shadow-2xl space-y-4 ${
+          <div className={`md:hidden mt-3 p-4 sm:p-5 rounded-2xl sm:rounded-3xl border transition-all animate-fadeIn shadow-2xl space-y-2 ${
             isLight
               ? 'bg-white border-slate-200 text-slate-800'
               : 'bg-[#0f172a] border-slate-800 text-slate-100'
           }`}>
-            {/* Clean Navigation Links List (SatsetReels Style: simple text, left-aligned, no bulky buttons) */}
+            {/* Clean Navigation Links List (SatsetReels Style: simple text, left-aligned, no combined languages) */}
             <div className="flex flex-col space-y-1">
               <button
                 onClick={() => handleTabSelect('speedtest')}
@@ -250,7 +240,7 @@ export default function Navbar({
                       : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                {lang === 'en' ? 'Home / Speed Test' : 'Beranda'}
+                {lang === 'en' ? 'Speed Test' : 'Beranda'}
               </button>
 
               <button
@@ -276,7 +266,7 @@ export default function Navbar({
                       : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
-                {lang === 'en' ? 'Test History' : 'Riwayat'}
+                {lang === 'en' ? 'History' : 'Riwayat'}
               </button>
 
               <button
@@ -320,43 +310,9 @@ export default function Navbar({
                       : 'text-slate-200 hover:text-white hover:bg-slate-800/60'
                   }`}
                 >
-                  {lang === 'en' ? 'Contact' : 'Hubungi Kami'}
+                  {lang === 'en' ? 'Contact Us' : 'Hubungi Kami'}
                 </button>
               )}
-            </div>
-
-            {/* Social Media Links: Instagram & TikTok (Official Links Requested by User) */}
-            <div className={`pt-3 border-t flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2.5 ${
-              isLight ? 'border-slate-200 text-slate-700' : 'border-slate-800 text-slate-300'
-            }`}>
-              <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                Media Sosial:
-              </span>
-              <div className="flex items-center gap-2">
-                {/* Instagram Link */}
-                <a
-                  href="https://www.instagram.com/aaleano?rpxt=eGlsNnBveTkxbzl2&utm_source=qr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/20 transition-all cursor-pointer"
-                  title="Instagram @aaleano"
-                >
-                  <Instagram className="w-3.5 h-3.5" />
-                  <span>@aaleano</span>
-                </a>
-
-                {/* TikTok Link */}
-                <a
-                  href="https://www.tiktok.com/@aleeinhere"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 transition-all cursor-pointer"
-                  title="TikTok @aleeinhere"
-                >
-                  <TikTokIcon className="w-3.5 h-3.5" />
-                  <span>@aleeinhere</span>
-                </a>
-              </div>
             </div>
           </div>
         )}

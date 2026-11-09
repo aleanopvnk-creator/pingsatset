@@ -458,11 +458,11 @@ export default function App() {
                   <div className="flex items-center space-x-2">
                     <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
                     <span className="text-[11px] font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
-                      Speed Console
+                      {lang === 'en' ? 'Speed Console' : 'Konsol Kecepatan'}
                     </span>
                   </div>
                   <span className="text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400">
-                    Live Telemetry
+                    {lang === 'en' ? 'Live Telemetry' : 'Telemetri Langsung'}
                   </span>
                 </div>
 
@@ -488,7 +488,7 @@ export default function App() {
                   <button
                     onClick={() => setIsServerSelectorOpen(true)}
                     className="flex items-center space-x-1 truncate max-w-[45%] text-cyan-600 dark:text-cyan-400 hover:underline cursor-pointer font-bold text-[10px]"
-                    title="Ganti Server Uji"
+                    title={lang === 'en' ? 'Change Test Server' : 'Ganti Server Uji'}
                   >
                     <span className="truncate">{selectedServer?.name || 'Yogyakarta Core'}</span>
                     <span className="text-[9px] uppercase font-black text-slate-400">({selectedServer?.flagCode || 'ID'})</span>

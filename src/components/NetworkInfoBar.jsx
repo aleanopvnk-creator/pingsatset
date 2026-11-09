@@ -9,7 +9,7 @@ export default function NetworkInfoBar({
   onOpenServerSelector,
   onWifiDetected
 }) {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [wifiDetails, setWifiDetails] = useState(() => {
     try {
       const cached = localStorage.getItem('pingsatset_wifi_details');
@@ -157,14 +157,14 @@ export default function NetworkInfoBar({
                 onBlur={() => setIsEditingSsid(false)}
                 onKeyDown={(e) => e.key === 'Enter' && setIsEditingSsid(false)}
                 className="w-full bg-slate-100 dark:bg-slate-950 text-xs font-black text-cyan-600 dark:text-cyan-400 border border-cyan-500 px-1 py-0.5 rounded focus:outline-none"
-                placeholder="Nama Wi-Fi Anda..."
+                placeholder={lang === 'en' ? 'Your Wi-Fi Name...' : 'Nama Wi-Fi Anda...'}
                 autoFocus
               />
             ) : (
               <div 
                 className="flex items-center justify-between min-w-0 cursor-pointer group/ssid"
                 onClick={() => setIsEditingSsid(true)}
-                title="Klik untuk ubah nama Wi-Fi Anda"
+                title={lang === 'en' ? 'Click to edit your Wi-Fi name' : 'Klik untuk ubah nama Wi-Fi Anda'}
               >
                 <span className="text-[11px] sm:text-xs font-black text-cyan-600 dark:text-cyan-400 truncate group-hover/ssid:underline" title={currentSsid}>
                   {currentSsid}
@@ -176,7 +176,7 @@ export default function NetworkInfoBar({
                     setIsEditingSsid(true);
                   }}
                   className="text-slate-500 hover:text-cyan-500 dark:text-slate-400 dark:hover:text-cyan-400 ml-1 shrink-0 p-0.5 rounded cursor-pointer transition-colors"
-                  title="Ubah nama Wi-Fi Anda"
+                  title={lang === 'en' ? 'Edit your Wi-Fi name' : 'Ubah nama Wi-Fi Anda'}
                 >
                   <Edit3 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>

@@ -18,7 +18,7 @@ export default function MetricsCards({
   wifiName = 'AP UTY Wifi',
   variant = 'full' // 'full' | 'telemetry' | 'insights'
 }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [isPacketLossModalOpen, setIsPacketLossModalOpen] = useState(false);
 
   const lossVal = typeof packetLoss === 'number' ? packetLoss : parseFloat(packetLoss) || 0;
@@ -231,7 +231,7 @@ export default function MetricsCards({
           >
             <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950 stroke-[2.5]" />
             <span className="text-slate-950 font-black hidden xs:inline">{t('shareResultsBtn')}</span>
-            <span className="text-slate-950 font-black xs:hidden">Share</span>
+            <span className="text-slate-950 font-black xs:hidden">{lang === 'en' ? 'Share' : 'Bagikan'}</span>
           </button>
         )}
       </div>
@@ -319,7 +319,7 @@ export default function MetricsCards({
       <div className="flex items-center justify-center space-x-2 py-2">
         <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/60" />
         <span className="text-xs font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">
-          PingSatSet <span className="text-cyan-500 font-black">Precision Diagnostics</span>
+          PingSatSet <span className="text-cyan-500 font-black">{lang === 'en' ? 'Precision Diagnostics' : 'Diagnostik Presisi'}</span>
         </span>
         <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/60" />
       </div>
