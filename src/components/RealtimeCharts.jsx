@@ -111,26 +111,30 @@ export default function RealtimeCharts({ downloadHistory = [], uploadHistory = [
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-rows-1 gap-3.5 sm:gap-4 w-full lg:flex-1">
       {/* Throughput Curve Chart */}
-      <div className="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 shadow-sm min-w-0 overflow-hidden flex flex-col justify-between">
-        <h3 className="text-xs font-black uppercase tracking-wider text-slate-950 dark:text-white mb-2 sm:mb-3 flex items-center space-x-2">
+      <div className="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 shadow-sm min-w-0 min-h-0 overflow-hidden flex flex-col">
+        <h3 className="text-xs font-black uppercase tracking-wider text-slate-950 dark:text-white mb-2 sm:mb-3 flex items-center space-x-2 shrink-0">
           <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shrink-0" />
           <span className="truncate">{t('throughputChartTitle')}</span>
         </h3>
-        <div className="h-36 sm:h-44 w-full">
-          <Line data={speedChartData} options={chartOptions} />
+        <div className="relative w-full h-36 sm:h-44 lg:h-auto lg:flex-1 lg:min-h-[185px]">
+          <div className="absolute inset-0">
+            <Line data={speedChartData} options={chartOptions} />
+          </div>
         </div>
       </div>
 
       {/* Latency Stability Chart */}
-      <div className="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 shadow-sm min-w-0 overflow-hidden flex flex-col justify-between">
-        <h3 className="text-xs font-black uppercase tracking-wider text-slate-950 dark:text-white mb-2 sm:mb-3 flex items-center space-x-2">
+      <div className="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 shadow-sm min-w-0 min-h-0 overflow-hidden flex flex-col">
+        <h3 className="text-xs font-black uppercase tracking-wider text-slate-950 dark:text-white mb-2 sm:mb-3 flex items-center space-x-2 shrink-0">
           <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
           <span className="truncate">{t('latencyChartTitle')}</span>
         </h3>
-        <div className="h-36 sm:h-44 w-full">
-          <Line data={pingChartData} options={chartOptions} />
+        <div className="relative w-full h-36 sm:h-44 lg:h-auto lg:flex-1 lg:min-h-[185px]">
+          <div className="absolute inset-0">
+            <Line data={pingChartData} options={chartOptions} />
+          </div>
         </div>
       </div>
     </div>

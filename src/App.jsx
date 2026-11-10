@@ -451,10 +451,10 @@ export default function App() {
             {/* Desktop Command Center / App Dashboard Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-stretch">
               {/* Left Column: Hero Speedometer Instrument Console (5 cols on lg/xl) */}
-              <div className={`lg:col-span-5 flex flex-col justify-between glass-panel p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl border text-center shadow-xl relative ${isLight ? 'border-slate-200 shadow-md' : 'border-slate-800/90'
+              <div className={`lg:col-span-5 flex flex-col justify-between glass-panel p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl border text-center shadow-xl relative ${isLight ? 'border-slate-200 shadow-md' : 'border-slate-800/90'
                 }`}>
                 {/* Console Header Bar */}
-                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-3 mb-2 w-full text-left">
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-2.5 mb-1.5 w-full text-left">
                   <div className="flex items-center space-x-2">
                     <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
                     <span className="text-[11px] font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
@@ -467,7 +467,7 @@ export default function App() {
                 </div>
 
                 {/* Speedometer Gauge & Action Button */}
-                <div className="my-auto py-2">
+                <div className="my-auto py-1">
                   <SpeedometerGauge
                     isRunning={isRunning}
                     stage={stage}
@@ -478,7 +478,7 @@ export default function App() {
                 </div>
 
                 {/* Console Hardware & Target Server Telemetry Strip */}
-                <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 w-full flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                <div className="pt-2.5 border-t border-slate-200 dark:border-slate-800/80 w-full flex items-center justify-between text-[11px] text-slate-500 font-mono">
                   <div className="flex items-center space-x-1.5 truncate max-w-[55%]">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                     <span className="truncate font-bold text-slate-700 dark:text-slate-300" title={detectedWifiName}>
@@ -497,7 +497,7 @@ export default function App() {
               </div>
 
               {/* Right Column: Live Telemetry Dashboard & Real-time Charts (7 cols on lg/xl) */}
-              <div className="lg:col-span-7 flex flex-col justify-between gap-3.5 sm:gap-4">
+              <div className="lg:col-span-7 flex flex-col gap-3.5 sm:gap-4">
                 {/* 5 Primary Metrics Cards + Quality Grade Bar */}
                 <MetricsCards
                   variant="telemetry"

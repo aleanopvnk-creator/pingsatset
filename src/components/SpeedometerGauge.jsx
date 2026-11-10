@@ -71,17 +71,17 @@ export default function SpeedometerGauge({
   const badge = getStageBadge();
 
   return (
-    <div className="flex flex-col items-center justify-center relative py-4 sm:py-6">
+    <div className="flex flex-col items-center justify-center relative py-2 sm:py-3 lg:py-2">
       {/* Background Glowing Orbs */}
-      <div className={`absolute w-72 sm:w-80 h-72 sm:h-80 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow ${
+      <div className={`absolute w-64 sm:w-72 h-64 sm:h-72 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow ${
         isLight ? 'bg-cyan-400/15' : 'bg-cyan-500/15'
       }`} />
-      <div className={`absolute w-64 sm:w-72 h-64 sm:h-72 rounded-full blur-3xl pointer-events-none -z-10 ${
+      <div className={`absolute w-56 sm:w-64 h-56 sm:h-64 rounded-full blur-3xl pointer-events-none -z-10 ${
         isLight ? 'bg-emerald-400/10' : 'bg-emerald-500/10'
       }`} />
 
       {/* Speedometer SVG Canvas Container (Fluid responsive across all screens) */}
-      <div className="relative w-full max-w-[270px] xs:max-w-[295px] sm:max-w-[340px] md:max-w-[370px] aspect-square flex items-center justify-center mx-auto">
+      <div className="relative w-full max-w-[260px] xs:max-w-[285px] sm:max-w-[310px] lg:max-w-[300px] xl:max-w-[325px] aspect-square flex items-center justify-center mx-auto">
         {/* Dynamic Running Ripple Halo */}
         {isRunning && (
           <div className="absolute inset-2 rounded-full border-2 border-cyan-400/40 animate-ping pointer-events-none opacity-40" />
@@ -207,7 +207,7 @@ export default function SpeedometerGauge({
 
           {/* Main Digital Speed Value */}
           <div className="flex items-baseline justify-center space-x-1">
-            <span className={`text-5xl sm:text-6xl md:text-7xl font-black tracking-tight font-mono ${
+            <span className={`text-4xl xs:text-5xl sm:text-5xl xl:text-6xl font-black tracking-tight font-mono ${
               isLight ? 'text-slate-950 font-black' : 'text-white font-black'
             }`}>
               {currentSpeed > 0 ? currentSpeed.toFixed(1) : '0.0'}
@@ -232,11 +232,11 @@ export default function SpeedometerGauge({
       </div>
 
       {/* Start / Restart Action Button (Clean Pill Button, No Glowing Light) */}
-      <div className="mt-5 sm:mt-6 w-full flex justify-center">
+      <div className="mt-3 sm:mt-4 w-full flex justify-center">
         <button
           onClick={onStartTest}
           disabled={isRunning}
-          className={`relative group overflow-hidden w-full max-w-xs sm:w-auto px-8 sm:px-12 py-3.5 sm:py-4 rounded-full font-black text-xs sm:text-sm md:text-base tracking-wider uppercase transition-all duration-300 flex items-center justify-center space-x-2.5 sm:space-x-3 shadow-md cursor-pointer ${
+          className={`relative group overflow-hidden w-full max-w-xs sm:w-auto px-8 sm:px-10 py-3 sm:py-3.5 rounded-full font-black text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 flex items-center justify-center space-x-2.5 sm:space-x-3 shadow-md cursor-pointer ${
             isRunning
               ? isLight
                 ? 'bg-slate-200 text-slate-900 border border-slate-300 cursor-not-allowed shadow-none'

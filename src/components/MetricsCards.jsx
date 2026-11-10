@@ -113,16 +113,16 @@ export default function MetricsCards({
       )}
 
       {/* 5 Primary Metric Glass Cards (Balanced 2x2+1 on mobile, 3 on tablet, 5 on desktop) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3">
         {/* Download Card (Cyan Accent) */}
-        <div className={`glass-panel p-3 sm:p-3.5 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'download' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
+        <div className={`glass-panel p-2.5 sm:p-3 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'download' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
           <div className="flex items-center justify-between mb-1 sm:mb-1.5">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-200 truncate">{t('download')}</span>
             <ArrowDownCircle className={`w-4 h-4 text-cyan-500 stroke-[2.2] shrink-0 ml-1 ${stage === 'download' ? 'animate-bounce' : ''}`} />
           </div>
           <div className="flex items-baseline space-x-1 overflow-hidden">
-            <span className="text-xl xs:text-2xl md:text-3xl font-black text-cyan-600 dark:text-cyan-400 font-mono truncate">{download > 0 ? download.toFixed(1) : '0.0'}</span>
-            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">Mbps</span>
+            <span className="text-xl xs:text-2xl xl:text-[21px] 2xl:text-2xl font-black text-cyan-600 dark:text-cyan-400 font-mono truncate">{download > 0 ? download.toFixed(1) : '0.0'}</span>
+            <span className="text-[9px] sm:text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">Mbps</span>
           </div>
           <div className="mt-1 text-[10px] text-slate-700 dark:text-slate-300 font-mono font-bold truncate">
             {t('peak')}: <span className="font-black text-slate-950 dark:text-white">{downloadPeak > 0 ? downloadPeak.toFixed(1) : '0.0'} Mbps</span>
@@ -130,14 +130,14 @@ export default function MetricsCards({
         </div>
 
         {/* Upload Card (Theme Cyan Accent) */}
-        <div className={`glass-panel p-3 sm:p-3.5 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'upload' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
+        <div className={`glass-panel p-2.5 sm:p-3 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'upload' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
           <div className="flex items-center justify-between mb-1 sm:mb-1.5">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-200 truncate">{t('upload')}</span>
             <ArrowUpCircle className={`w-4 h-4 text-cyan-500 stroke-[2.2] shrink-0 ml-1 ${stage === 'upload' ? 'animate-bounce' : ''}`} />
           </div>
           <div className="flex items-baseline space-x-1 overflow-hidden">
-            <span className="text-xl xs:text-2xl md:text-3xl font-black text-cyan-600 dark:text-cyan-400 font-mono truncate">{upload > 0 ? upload.toFixed(1) : '0.0'}</span>
-            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">Mbps</span>
+            <span className="text-xl xs:text-2xl xl:text-[21px] 2xl:text-2xl font-black text-cyan-600 dark:text-cyan-400 font-mono truncate">{upload > 0 ? upload.toFixed(1) : '0.0'}</span>
+            <span className="text-[9px] sm:text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">Mbps</span>
           </div>
           <div className="mt-1 text-[10px] text-slate-700 dark:text-slate-300 font-mono font-bold truncate">
             {t('peak')}: <span className="font-black text-slate-950 dark:text-white">{uploadPeak > 0 ? uploadPeak.toFixed(1) : '0.0'} Mbps</span>
@@ -145,14 +145,14 @@ export default function MetricsCards({
         </div>
 
         {/* Ping / Lag Card (Theme Accent) */}
-        <div className={`glass-panel p-3 sm:p-3.5 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'ping' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
+        <div className={`glass-panel p-2.5 sm:p-3 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'ping' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
           <div className="flex items-center justify-between mb-1 sm:mb-1.5">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-200 truncate">{t('ping')}</span>
             <Activity className={`w-4 h-4 text-cyan-500 stroke-[2.2] shrink-0 ml-1 ${stage === 'ping' ? 'animate-pulse' : ''}`} />
           </div>
           <div className="flex items-baseline space-x-1 overflow-hidden">
-            <span className="text-xl xs:text-2xl md:text-3xl font-black text-slate-950 dark:text-white font-mono truncate">{ping > 0 ? ping.toFixed(0) : '0'}</span>
-            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">ms</span>
+            <span className="text-xl xs:text-2xl xl:text-[21px] 2xl:text-2xl font-black text-slate-950 dark:text-white font-mono truncate">{ping > 0 ? ping.toFixed(0) : '0'}</span>
+            <span className="text-[9px] sm:text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">ms</span>
           </div>
           <div className="mt-1 text-[10px] text-slate-700 dark:text-slate-300 font-mono font-bold truncate">
             {t('responsiveness')}
@@ -160,14 +160,14 @@ export default function MetricsCards({
         </div>
 
         {/* Jitter Card (Theme Cyan Accent) */}
-        <div className={`glass-panel p-3 sm:p-3.5 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'ping' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
+        <div className={`glass-panel p-2.5 sm:p-3 rounded-2xl border transition-all duration-300 min-w-0 ${stage === 'ping' ? 'border-cyan-400 ring-2 ring-cyan-400/20 shadow-md' : 'border-slate-300 dark:border-slate-800'}`}>
           <div className="flex items-center justify-between mb-1 sm:mb-1.5">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-200 truncate">{t('jitter')}</span>
             <Signal className="w-4 h-4 text-cyan-500 stroke-[2.2] shrink-0 ml-1" />
           </div>
           <div className="flex items-baseline space-x-1 overflow-hidden">
-            <span className="text-xl xs:text-2xl md:text-3xl font-black text-slate-950 dark:text-white font-mono truncate">{jitter > 0 ? jitter.toFixed(1) : '0.0'}</span>
-            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">ms</span>
+            <span className="text-xl xs:text-2xl xl:text-[21px] 2xl:text-2xl font-black text-slate-950 dark:text-white font-mono truncate">{jitter > 0 ? jitter.toFixed(1) : '0.0'}</span>
+            <span className="text-[9px] sm:text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">ms</span>
           </div>
           <div className="mt-1 text-[10px] text-slate-700 dark:text-slate-300 font-mono font-bold truncate">
             {t('latencyVariation')}
@@ -175,19 +175,19 @@ export default function MetricsCards({
         </div>
 
         {/* Packet Loss Card (Full Width Span on 2-col mobile) */}
-        <div className="glass-panel p-3 sm:p-3.5 rounded-2xl border border-slate-300 dark:border-slate-800 relative group cursor-pointer hover:border-cyan-500/60 transition-all col-span-2 sm:col-span-1 lg:col-span-1 xl:col-span-1 min-w-0" onClick={() => setIsPacketLossModalOpen(true)}>
+        <div className="glass-panel p-2.5 sm:p-3 rounded-2xl border border-slate-300 dark:border-slate-800 relative group cursor-pointer hover:border-cyan-500/60 transition-all col-span-2 sm:col-span-1 lg:col-span-1 xl:col-span-1 min-w-0" onClick={() => setIsPacketLossModalOpen(true)}>
           <div className="flex items-center justify-between mb-1 sm:mb-1.5">
-            <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-200 flex items-center space-x-1 truncate">
-              <span>{t('packetLoss')}</span>
-              <HelpCircle className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" title="Klik untuk penjelasan detail" />
+            <span className="text-[9.5px] font-black uppercase tracking-tight text-slate-700 dark:text-slate-200 flex items-center space-x-1 truncate">
+              <span className="truncate">{t('packetLoss')}</span>
+              <HelpCircle className="w-3 h-3 text-cyan-600 dark:text-cyan-400 shrink-0" title={lang === 'en' ? 'Click for details' : 'Klik untuk penjelasan detail'} />
             </span>
             <AlertCircle className="w-4 h-4 text-cyan-600 dark:text-cyan-400 stroke-[2.2] shrink-0 ml-1" />
           </div>
           <div className="flex items-baseline space-x-1 overflow-hidden">
-            <span className="text-xl xs:text-2xl md:text-3xl font-black text-slate-950 dark:text-white font-mono truncate">
+            <span className="text-xl xs:text-2xl xl:text-[21px] 2xl:text-2xl font-black text-slate-950 dark:text-white font-mono truncate">
               {packetLossStatus === 'UNMEASURABLE' ? 'N/A' : lossVal.toFixed(2)}
             </span>
-            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">%</span>
+            <span className="text-[9px] sm:text-[10px] font-black text-slate-700 dark:text-slate-300 shrink-0">%</span>
           </div>
           <div className="mt-1 flex items-center justify-between gap-1">
             <span className={`px-1.5 py-0.5 rounded text-[9px] font-black border truncate ${lossBadge.color}`}>
